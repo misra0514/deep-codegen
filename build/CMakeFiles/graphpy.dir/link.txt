@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG -fopenmp -flto -shared  -o graphpy.cpython-39-x86_64-linux-gnu.so CMakeFiles/graphpy.dir/kernel_pybind.cpp.o   -L/mnt/data/home/yguo/projects/sys4NN/deep-codegen  -Wl,-rpath,/mnt/data/home/yguo/projects/sys4NN/deep-codegen -lgp 
