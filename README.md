@@ -5,10 +5,12 @@ by Yufeng Guo
 
 by installation, follow the steps:
 ```
+
 mkdir build && cd build
 cmake ../
 make
-cp ./gra* ../HW2/
+cp ./gra* ../hw2/
+cp ./pytorch_apis.py ./hw2/
 ```
 
 ## model architecture

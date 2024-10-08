@@ -1,9 +1,11 @@
 
 import numpy as np
 import torch
-from pytorch_apis import linear
 import torch.nn as nn
 
+import sys
+sys.path.append("/mnt/data/home/yguo/projects/sys4NN/deep-codegen")
+from pytorch_apis import linear
 # a = torch.rand(2,2).cuda()
 # a = torch.ones([2,2]).cuda()
 
@@ -44,7 +46,7 @@ class mylinear(nn.Module):
         self.in_s = inputsize
         self.out_s = outputsize
         self.b = torch.rand(1)
-        self.w = torch.rand([inputsize, outputsize])
+        self.w = torch.rand([ outputsize, inputsize])
     def forward(self, x):
         # TODO: use view to transpose
         w_t = self.w.view(self.in_s, self.out_s)
