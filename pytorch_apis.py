@@ -6,7 +6,7 @@ class linear_impl(th.autograd.Function):
     def forward(ctx, X, W, dim1_0, dim1_1, device0):
         # ctx.backward_cache = W #must be implemented
         # ctx.backward_cache = X #must be implemented
-        ctx.save_for_backward(W)
+        # ctx.save_for_backward(W)
         res = gp_apis.gp_linear(X, W, dim1_0, dim1_1, device0)
         return res
 

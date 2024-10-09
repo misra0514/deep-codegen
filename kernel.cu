@@ -171,7 +171,7 @@ void linear(array2d_t<float>& X, array2d_t<float>& W, array2d_t<float>& output1)
     gemm_v02< 32U, 32U, 32U><<<grid_dim, block_dim, 1024, 0 >>>(M, N, K, X.data_ptr, K, W.data_ptr, N, 1, output1.data_ptr, N);    
     // GEMM_naiev<<<1, GridDim>>>(X.data_ptr, W.data_ptr, output1.data_ptr, M, N, K);
     // sgemm<<<1,1>>>(M,N,K,X.data_ptr, W.data_ptr,output1.data_ptr);
-    // cout<<cudaGetErrorName(cudaGetLastError());
+    cout<<cudaGetErrorName(cudaGetLastError());
     // cudaDeviceSynchronize();
 }
 

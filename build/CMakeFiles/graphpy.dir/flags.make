@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -Dgraphpy_EXPORTS
 
-CXX_INCLUDES = -isystem /mnt/data/home/yguo/projects/sys4NN/deep-codegen/pybind11/include -isystem /mnt/data/home/yguo/anaconda3/envs/t1cu11/include/python3.9
+CXX_INCLUDES = -isystem /mnt/data/home/yguo/projects/sys4NN/deep-codegen/pybind11/include -isystem /mnt/data/home/yguo/anaconda3/include/python3.12
 
 CXX_FLAGS = -O3 -DNDEBUG -std=gnu++14 -fPIC -fvisibility=hidden -Wno-unused-result -D_FILE_OFFSET_BITS=64 -fPIC -march=native -mfpmath=sse -msse4.2 -mavx2 -ffast-math -fopenmp -flto -fno-fat-lto-objects
 

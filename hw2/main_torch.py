@@ -27,8 +27,8 @@ LR = 0.001        #学习率
 
 from model import DNN, LeNet
 
-model = DNN()
-# model = LeNet()
+# model = DNN()
+model = LeNet()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)
 

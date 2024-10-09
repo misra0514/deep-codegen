@@ -2,7 +2,8 @@
 import numpy as np
 import torch
 import torch.nn as nn
-
+# import torch.nn as nn
+import torch.nn.functional as F
 import sys
 sys.path.append("/mnt/data/home/yguo/projects/sys4NN/deep-codegen")
 from pytorch_apis import linear
@@ -20,25 +21,6 @@ from pytorch_apis import linear
 # b = torch.ones(2,2).cuda()*2
 # print(linear(a,b,2,2,'cuda'))
 # print(torch.matmul(a,b))
-
-
-
-class DNN(nn.Module):
-    def __init__(self):
-        super().__init__()
-        layers =  [1,10, 10 ,1]   #网络每一层的神经元个数，[1,10,1]说明只有一个隐含层，输入的变量是一个，也对应一个输出。如果是两个变量对应一个输出，那就是[2，10，1]
-        self.layer1 = mylinear(layers[0],layers[1])  #用torh.nn.Linear构建线性层，本质上相当于构建了一个维度为[layers[0],layers[1]]的矩阵，这里面所有的元素都是权重
-        self.layer2 = mylinear(layers[1],layers[2])
-        self.layer3 = mylinear(layers[2],layers[3])
-        self.elu = nn.ELU()      
-    def forward(self,d):
-        d1 = self.layer1(d)
-        d1 = self.elu(d1)
-        d2 = self.layer2(d1)
-        d2 = self.elu(d2)
-        d2 = self.layer3(d2)
-        return d2
-    
 # X: B*int, W: in * out ---> B*out
 class mylinear(nn.Module):
     def __init__(self, inputsize, outputsize):
@@ -53,3 +35,75 @@ class mylinear(nn.Module):
         linear(x, w_t, self.in_s, self.out_s ,'cuda')
         x += self.b
         return x
+
+
+
+class LeNet(nn.Module):
+    def __init__(self):
+        super(LeNet, self).__init__()
+        self.conv1 = nn.Sequential(     #input_size=(1*28*28)
+            nn.Conv2d(1, 6, 5, 1, 2), #padding=2保证输入输出尺寸相同
+            nn.ReLU(),      #input_size=(6*28*28)
+            nn.MaxPool2d(kernel_size=2, stride=2),#output_size=(6*14*14)
+        )
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(6, 16, 5),
+            nn.ReLU(),      #input_size=(16*10*10)
+            nn.MaxPool2d(2, 2)  #output_size=(16*5*5)
+        )
+        self.fc1 = nn.Sequential(
+            nn.Linear(16 * 5 * 5, 120),
+            nn.ReLU()
+        )
+        self.fc2 = nn.Sequential(
+            nn.Linear(120, 84),
+            nn.ReLU()
+        )
+        self.fc3 = nn.Linear(84, 10)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.conv2(x)
+        # nn.Linear()的输入输出都是维度为一的值，所以要把多维度的tensor展平成一维
+        x = x.view(x.size()[0], -1)
+        x = self.fc1(x)
+        x = self.fc2(x)
+        x = self.fc3(x)
+        return x
+
+
+class DNN(nn.Module):
+    def __init__(self):
+        super(DNN, self).__init__()
+        self.conv1 = nn.Sequential(     #input_size=(1*28*28)
+            nn.Conv2d(1, 6, 5, 1, 2), #padding=2保证输入输出尺寸相同
+            nn.ReLU(),      #input_size=(6*28*28)
+            nn.MaxPool2d(kernel_size=2, stride=2),#output_size=(6*14*14)
+        )
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(6, 16, 5),
+            nn.ReLU(),      #input_size=(16*10*10)
+            nn.MaxPool2d(2, 2)  #output_size=(16*5*5)
+        )
+        self.fc1 = nn.Sequential(
+            mylinear(16 * 5 * 5, 120),
+            nn.ReLU()
+        )
+        self.fc2 = nn.Sequential(
+            mylinear(120, 84),
+            nn.ReLU()
+        )
+        self.fc3 = mylinear(84, 10)
+
+    # 定义前向传播过程，输入为x
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.conv2(x)
+        # nn.Linear()的输入输出都是维度为一的值，所以要把多维度的tensor展平成一维
+        x = x.view(x.size()[0], -1)
+        x = self.fc1(x)
+        x = self.fc2(x)
+        x = self.fc3(x)
+        return x
+
+    
