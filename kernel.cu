@@ -3,10 +3,6 @@
 #include "unistd.h"
 #include "iostream"
 
-// # define BLOCK_TILE_SIZE_X 32
-// # define BLOCK_TILE_SIZE_Y 32
-// # define BLOCK_TILE_SIZE_K 32
-// # define BLOCK_TILE_SKEW_SIZE_K 32
 #define OFFSET(row, col, ld) ((row) * (ld) + (col))
 #define FLOAT4(pointer) (reinterpret_cast<float4*>(&(pointer))[0])
 
@@ -134,64 +130,62 @@ __global__ void gemm_v02(size_t m, size_t n, size_t k, float const* A,
     }
 }
 
-__global__ void GEMM_naiev(const float *A, const float *B, float *C, 
-    int M, int N, int K) {
-    // tx<=N, ty<=M
-    int tx = blockIdx.x * blockDim.x + threadIdx.x;
-    int ty = blockIdx.y * blockDim.y + threadIdx.y;
-    if(ty < M && tx < N) {
-        float c = 0;
-        for(int i = 0; i < K; ++i){
-            printf("%f , %f \n",A[ty * K + i] ,   B[i * N + tx]);
-            c += A[ty * K + i] * B[i * N + tx];
-        }
-        C[ty * N + tx] = c;
-    }
-}
+void linear(array2d_t<float>& X, array2d_t<float>& W, array2d_t<float>& output1){;
+    int M= X.row_count;
+    int K= X.col_count;
+    int N= W.col_count;
+    // int thr_per_blk = 256;
+    // int blk_in_grid=ceil(float(N) / thr_per_blk);
+    // dim3 BlockDim(32, 32);  
+    // // cudaMemset( X.data_ptr , 1,4*sizeof(float));
+    // dim3 GridDim(2, 2);  
+    // // cudaMemset(output1.data_ptr , 4*sizeof(float) , 2 );
 
-
-// void linear(array2d_t<float>& X, array2d_t<float>& W, array2d_t<float>& output1){;
-//     int M= X.row_count;
-//     int K= X.col_count;
-//     int N= W.col_count;
-//     // int thr_per_blk = 256;
-//     // int blk_in_grid=ceil(float(N) / thr_per_blk);
-//     // dim3 BlockDim(32, 32);  
-//     // // cudaMemset( X.data_ptr , 1,4*sizeof(float));
-//     // dim3 GridDim(2, 2);  
-//     // // cudaMemset(output1.data_ptr , 4*sizeof(float) , 2 );
-
-//     constexpr unsigned int BLOCK_TILE_SIZE_X{32U};
-//     constexpr unsigned int BLOCK_TILE_SIZE_Y{32U};
-//     constexpr unsigned int BLOCK_TILE_SIZE_K{32U};
-//     dim3 const block_dim{BLOCK_TILE_SIZE_X, BLOCK_TILE_SIZE_Y, 1U};
-//     dim3 const grid_dim{
-//         (static_cast<unsigned int>(N) + block_dim.x - 1U) / block_dim.x,
-//         (static_cast<unsigned int>(M) + block_dim.y - 1U) / block_dim.y, 1U};
-//     gemm_v02< 32U, 32U, 32U><<<grid_dim, block_dim, 1024, 0 >>>(M, N, K, X.data_ptr, K, W.data_ptr, N, 1, output1.data_ptr, N);    
-//     // GEMM_naiev<<<1, GridDim>>>(X.data_ptr, W.data_ptr, output1.data_ptr, M, N, K);
-//     // sgemm<<<1,1>>>(M,N,K,X.data_ptr, W.data_ptr,output1.data_ptr);
-//     cout<<cudaGetErrorName(cudaGetLastError());
-//     // cudaDeviceSynchronize();
-// }
-
-__global__ void spmmv_kernel(int * sourceV, int * destV, float* input, float* output ,int Vnum, int Enum){
-    // for eachnode, get neighbors
-    printf("INSIDE KERNEL: %d", Vnum);
-    printf("INSIDE KERNEL: %d", sourceV[0]);
-}
-
-__global__ void hello(){
-
-}
-
-void linear(array2d_t<float>& X, array2d_t<float>& W,  array2d_t<float>& output1){
-    hello<<<1,2>>>();
+    constexpr unsigned int BLOCK_TILE_SIZE_X{32U};
+    constexpr unsigned int BLOCK_TILE_SIZE_Y{32U};
+    constexpr unsigned int BLOCK_TILE_SIZE_K{32U};
+    dim3 const block_dim{BLOCK_TILE_SIZE_X, BLOCK_TILE_SIZE_Y, 1U};
+    dim3 const grid_dim{
+        (static_cast<unsigned int>(N) + block_dim.x - 1U) / block_dim.x,
+        (static_cast<unsigned int>(M) + block_dim.y - 1U) / block_dim.y, 1U};
+    gemm_v02< 32U, 32U, 32U><<<grid_dim, block_dim, 1024, 0 >>>(M, N, K, X.data_ptr, K, W.data_ptr, N, 1, output1.data_ptr, N);    
+    // GEMM_naiev<<<1, GridDim>>>(X.data_ptr, W.data_ptr, output1.data_ptr, M, N, K);
+    // sgemm<<<1,1>>>(M,N,K,X.data_ptr, W.data_ptr,output1.data_ptr);
     cout<<cudaGetErrorName(cudaGetLastError());
+    // cudaDeviceSynchronize();
 }
+
+__global__ void spmmv_kernel_csr
+(int * offset, int * destV, float* input, float* output ,int Vnum, int Enum, int feat_len){
+    // for eachnode, get neighbors, use mean as aggregate function
+    // printf("INSIDE KERNEL: %d", Vnum);
+    // printf("INSIDE KERNEL: %d", offset[0]);
+    // TODO: we use int 32 to represent offset. Be mindful that numpy array is originally int64 by default
+    int srcVId = blockIdx.x;
+    int featId = threadIdx.x;
+    int neiNum = offset[srcVId+1] - offset[srcVId];
+    // printf("NODE:off:%d:%d-%d \n", srcVId, offset[srcVId+1], offset[srcVId]);
+    extern __shared__ float features[];
+
+
+    for(int i=0; i<neiNum; i++){
+        int tarId = destV[offset[srcVId]+i];
+        features[featId] += input[tarId*feat_len + featId];
+        // printf("NODE-NEI:%d-%d, V:%f\n", srcVId ,tarId , input[tarId*feat_len + featId]);    }
+    if(neiNum != 0) features[featId] /= neiNum;
+    else features[featId] =0;
+    // for(int j=0; j<feat_len ; j++){
+    output[srcVId*feat_len + featId] = features[featId];
+    // }
+    return;
+}
+
 void gspmmv(graph_t& graph, array2d_t<float>& input1, array2d_t<float>& output, bool reverse, bool norm){
-    spmmv_kernel<<<1,1>>>
-    (graph.SourceVertex, graph.TargetVertex, input1.data_ptr, output.data_ptr, graph.get_vcount(),graph.get_ecount());
+    int feat_len = input1.col_count;
+
+    spmmv_kernel_csr<<<graph.get_vcount() ,  feat_len,feat_len*sizeof(float), 0 >>>
+    (graph.offset, graph.DestVertex, input1.data_ptr, output.data_ptr, graph.get_vcount(),graph.get_ecount(), feat_len);
     cout<<cudaGetErrorName(cudaGetLastError());
+    cudaDeviceSynchronize();
 }
 

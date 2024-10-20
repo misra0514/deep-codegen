@@ -94,7 +94,6 @@ PYBIND11_MODULE(graphpy, m) {
 
     ;
     
-    
 //   m.def("init_graph",
 //       [](py::array offset_csr, py::array nebrs_csr, py::array offset_csc, py::array nebrs_csc, int flag, int num_vcount) {
 //            graph_t* graph =  new graph_t;
@@ -108,9 +107,9 @@ PYBIND11_MODULE(graphpy, m) {
 //   );
 
   m.def("init_graph",
-      [](int num_vcount, int num_ecount,py::array sourceV, py::array targetV) {
+      [](int num_vcount, int num_ecount,py::array sourceV, py::array targetV, py::array offset) {
            graph_t* graph =  new graph_t;
-           graph->init(num_vcount, num_ecount, sourceV.request().ptr, targetV.request().ptr );
+           graph->init(num_vcount, num_ecount, sourceV.request().ptr, targetV.request().ptr, offset.request().ptr );
            return graph;
       }
   );

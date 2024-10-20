@@ -22,3 +22,10 @@ with linear layer was implemented through our own CUDA kernel funtion
 
 
 # HW3 
+## Environment Setup:
+NVCC:11.8, Nvidia A100
+```
+conda create -n dgl python=3.7
+conda install pytorch==1.6.0 torchvision==0.7.0 cudatoolkit=10.2 -c pytorch
+pip install dgl-cu102==0.6.1
+```

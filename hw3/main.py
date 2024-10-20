@@ -43,32 +43,34 @@ if __name__ == '__main__':
 
   torch.set_printoptions(edgeitems=100)
 
-  print(col)
-  print(row)
-
-
+  # print(col)
+  # print(row)
 
   numlist = torch.arange(col.size(0), dtype=torch.int32)
+  # adjcsr 仅仅是临界矩阵
   adj_csr = sp.csr_matrix((numlist.numpy(), (row, col)), shape=(g.num_nodes(), g.num_nodes()))
   row_ptr=torch.from_numpy(adj_csr.indptr)
   col_ind=torch.from_numpy(adj_csr.indices)
 
-  print(row_ptr)
-  print(col_ind)
+  # print(row_ptr)
+  # print(col_ind)
+
+  # print(adj_csr.shape)
+  # print(adj_csr.indptr) # 长度2709，  似乎是offset
+  # print(adj_csr.indices) # 感觉上似乎是Dest. Vertex
 
 
+  # features=g.ndata['feat']
+  # labels=g.ndata['label']
+  # n_feats=features.shape[1]
+  # n_classes=data.num_labels
+  # train_mask = g.ndata['train_mask']
+  # test_mask = g.ndata['test_mask']
 
-  features=g.ndata['feat']
-  labels=g.ndata['label']
-  n_feats=features.shape[1]
-  n_classes=data.num_labels
-  train_mask = g.ndata['train_mask']
-  test_mask = g.ndata['test_mask']
-
-  print('row count', row_ptr.size())
-  print('col index', col_ind.size())
-  print('features', features.size())
-  print('labels',  labels.size())
-  print('train_mask', train_mask.size(), train_mask)
-  print('test_maks', test_mask.size(), test_mask)
+  # print('row count', row_ptr.size()) #2709
+  # print('col index', col_ind.size()) # 10556
+  # print('features', features.size()) #([2708, 1433])
+  # print('labels',  labels.size())
+  # print('train_mask', train_mask.size(), train_mask)
+  # print('test_maks', test_mask.size(), test_mask)
 
