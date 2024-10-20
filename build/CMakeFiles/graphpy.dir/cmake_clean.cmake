@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/graphpy.dir/kernel_pybind.cpp.o"
   "CMakeFiles/graphpy.dir/kernel_pybind.cpp.o.d"
-  "graphpy.cpython-312-x86_64-linux-gnu.so"
+  "graphpy.cpython-37m-x86_64-linux-gnu.so"
   "graphpy.pdb"
 )
 

@@ -19,3 +19,6 @@ cp ./pytorch_apis.py ./hw2/
 with linear layer was implemented through our own CUDA kernel funtion
 
 ## Model runing && Result
+
+
+# HW3 

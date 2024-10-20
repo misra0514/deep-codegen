@@ -95,17 +95,26 @@ PYBIND11_MODULE(graphpy, m) {
     ;
     
     
+//   m.def("init_graph",
+//       [](py::array offset_csr, py::array nebrs_csr, py::array offset_csc, py::array nebrs_csc, int flag, int num_vcount) {
+//            graph_t* graph =  new graph_t;
+//            //cout<< offset_csr.shape(0) - 1<< "num_vcount"<< endl;
+//            graph->init(offset_csr.shape(0) - 1, nebrs_csr.itemsize(), 
+//                  offset_csr.request().ptr, nebrs_csr.request().ptr,
+//                  offset_csc.request().ptr, nebrs_csc.request().ptr, flag, num_vcount);
+//             //THD_COUNT = thd_count;
+//            return graph;
+//       }
+//   );
+
   m.def("init_graph",
-      [](py::array offset_csr, py::array nebrs_csr, py::array offset_csc, py::array nebrs_csc, int flag, int num_vcount) {
+      [](int num_vcount, int num_ecount,py::array sourceV, py::array targetV) {
            graph_t* graph =  new graph_t;
-           //cout<< offset_csr.shape(0) - 1<< "num_vcount"<< endl;
-           graph->init(offset_csr.shape(0) - 1, nebrs_csr.itemsize(), 
-                 offset_csr.request().ptr, nebrs_csr.request().ptr,
-                 offset_csc.request().ptr, nebrs_csc.request().ptr, flag, num_vcount);
-            //THD_COUNT = thd_count;
+           graph->init(num_vcount, num_ecount, sourceV.request().ptr, targetV.request().ptr );
            return graph;
       }
   );
+
 
   m.def("load_graph",
       [](const string& odir) {
