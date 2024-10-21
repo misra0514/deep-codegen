@@ -29,6 +29,9 @@ conda create -n dgl python=3.7
 conda install pytorch==1.6.0 torchvision==0.7.0 cudatoolkit=10.2 -c pytorch
 pip install dgl-cu102==0.6.1
 ```
-## GCN kernel
+## Graph and Kernel Implementation
 graph structures was decleared in csr.h file
 
+## Model Result
+#### CORA
+#### citeseer
