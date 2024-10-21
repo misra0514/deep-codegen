@@ -22,8 +22,8 @@ class GCNLayer(nn.Module):
         # Graph propagation using SpMMv
         # h = inputs*self.weight
         h = inputs
-        h = gspmmv(self.graph, h, h.shape[0], h.shape[1], False, False, self.device)
         h = self.linear(h)
+        h = gspmmv(self.graph, h, h.shape[0], h.shape[1], False, False, self.device)
         return h
 
 class TwoLayerGCN(nn.Module):

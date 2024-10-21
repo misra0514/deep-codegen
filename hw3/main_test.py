@@ -60,14 +60,14 @@ if __name__ == '__main__':
   #     print(f"参数的形状: {param.shape}")
   #     print()
 
-  optimizer = torch.optim.Adam((model.parameters()), lr=0.1) 
+  optimizer = torch.optim.Adam((model.parameters()), lr=0.01) 
   scaler = GradScaler()
   
 
 
   # TRAIN
   # for epoch in tqdm(range(1000)):
-  for epoch in range(1000):
+  for epoch in range(2000):
     out =  model(g.ndata['feat'].cuda())
     label = g.ndata['label'].cuda()
     out = torch.squeeze(out)

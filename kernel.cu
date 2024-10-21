@@ -166,12 +166,13 @@ __global__ void spmmv_kernel_csr
     int neiNum = offset[srcVId+1] - offset[srcVId];
     // printf("NODE:off:%d:%d-%d \n", srcVId, offset[srcVId+1], offset[srcVId]);
     extern __shared__ float features[];
-
+    features[featId] = 0;
 
     for(int i=0; i<neiNum; i++){
         int tarId = destV[offset[srcVId]+i];
         features[featId] += input[tarId*feat_len + featId];
-        // printf("NODE-NEI:%d-%d, V:%f\n", srcVId ,tarId , input[tarId*feat_len + featId]);    
+        // if(srcVId == 2707)
+        // printf("NODE-NEI:%d-%d, nerNum=%d, V:%f\n", srcVId ,tarId ,neiNum , features[featId]);    
     }
     if(neiNum != 0) features[featId] /= neiNum;
     else features[featId] =0;

@@ -34,8 +34,8 @@ torch.set_printoptions(profile="full")
 numlist = torch.arange(col.size(0), dtype=torch.int32)
 # adjcsr 仅仅是临界矩阵
 adj_csr = sp.csr_matrix((numlist.numpy(), (row, col)), shape=(g.num_nodes(), g.num_nodes()))
-row_ptr=torch.from_numpy(adj_csr.indptr)
-col_ind=torch.from_numpy(adj_csr.indices)
+row_ptr=torch.from_numpy(adj_csr.indptr) # offset
+col_ind=torch.from_numpy(adj_csr.indices) # nerb?
 # # TODO: col_ind 可能还有点问题，这个数组是ppt里的 DEST Vertex吗..?
 # print(col_ind)
 # pass
@@ -47,5 +47,5 @@ gra = graphpy.init_graph(Vnum ,Enum,adj_csr.indices, adj_csr.indices.astype(np.i
 # # time.sleep(10)
 
 res = gspmmv(gra, torch.ones([Vnum,2]).cuda(),Vnum,2, False, False  ,'cuda')
-print(res.shape)
 print(res)
+print(res.shape)
