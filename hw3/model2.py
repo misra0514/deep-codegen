@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch as th
 import torch.nn.functional as F
 # Add the parent directory to the Python path
 import sys
@@ -10,16 +11,20 @@ from pytorch_apis import linear, gspmmv
 class GCNLayer(nn.Module):
     def __init__(self, in_feats, out_feats, graph, device):
         super(GCNLayer, self).__init__()
-        self.weight = nn.Parameter(th.randn(in_feats, out_feats))
+        # self.weight = nn.Parameter(th.empty(in_feats, out_feats)).to(device)
         self.graph = graph
         self.device = device
+        self.linear = nn.Linear(in_feats,out_feats)
+        # self.register_parameter('weight',None)
+        # self.reset_parameters()
 
     def forward(self, inputs):
-        # Perform feature transformation using a linear layer
-        h = linear(inputs, self.weight, inputs.shape[0], self.weight.shape[1], self.device)
-        
         # Graph propagation using SpMMv
+        # h = inputs*self.weight
+        h = self.linear(inputs)
         h = gspmmv(self.graph, h, h.shape[0], h.shape[1], False, False, self.device)
+
+        # Perform feature transformation using a linear layer  
         return h
 
 class TwoLayerGCN(nn.Module):

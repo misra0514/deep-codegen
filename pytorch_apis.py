@@ -26,7 +26,7 @@ class gspmmv_impl(th.autograd.Function):
     def backward(ctx, dZ):
         graph = ctx.backward_cache
         res = gp_apis.gp_gspmmv(graph, dZ, dZ.shape[0],  dZ.shape[1], False, False, 'cuda')
-        return res
+        return None, res, None, None, None, None, None
 
 def gspmmv(graph, input1, dim_0, dim_1, reverse, norm, device0):
     return gspmmv_impl.apply(graph, input1, dim_0, dim_1, reverse, norm, device0)
