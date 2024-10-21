@@ -7,6 +7,8 @@ sys.path.append("/mnt/data/home/yguo/projects/sys4NN/deep-codegen")
 from pytorch_apis import linear
 from graphpy import graph_t
 
+import model2
+
 
 
 if __name__ == '__main__':
