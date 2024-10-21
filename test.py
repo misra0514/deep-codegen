@@ -46,6 +46,6 @@ Enum = col_ind.size()[0]
 gra = graphpy.init_graph(Vnum ,Enum,adj_csr.indices, adj_csr.indices.astype(np.int32) ,adj_csr.indptr.astype(np.int32) )
 # # time.sleep(10)
 
-res = gspmmv(gra, torch.ones([Vnum,1]).cuda(),Vnum,1, False, False  ,'cuda')
+res = gspmmv(gra, torch.ones([Vnum,2]).cuda(),Vnum,2, False, False  ,'cuda')
 print(res.shape)
 print(res)
