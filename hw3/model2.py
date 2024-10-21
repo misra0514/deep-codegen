@@ -21,10 +21,9 @@ class GCNLayer(nn.Module):
     def forward(self, inputs):
         # Graph propagation using SpMMv
         # h = inputs*self.weight
-        h = self.linear(inputs)
+        h = inputs
         h = gspmmv(self.graph, h, h.shape[0], h.shape[1], False, False, self.device)
-
-        # Perform feature transformation using a linear layer  
+        h = self.linear(h)
         return h
 
 class TwoLayerGCN(nn.Module):

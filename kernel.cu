@@ -171,7 +171,8 @@ __global__ void spmmv_kernel_csr
     for(int i=0; i<neiNum; i++){
         int tarId = destV[offset[srcVId]+i];
         features[featId] += input[tarId*feat_len + featId];
-        // printf("NODE-NEI:%d-%d, V:%f\n", srcVId ,tarId , input[tarId*feat_len + featId]);    }
+        // printf("NODE-NEI:%d-%d, V:%f\n", srcVId ,tarId , input[tarId*feat_len + featId]);    
+    }
     if(neiNum != 0) features[featId] /= neiNum;
     else features[featId] =0;
     // for(int j=0; j<feat_len ; j++){

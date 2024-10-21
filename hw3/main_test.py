@@ -53,14 +53,21 @@ if __name__ == '__main__':
   gra = graphpy.init_graph(Vnum ,Enum,adj_csr.indices, adj_csr.indices.astype(np.int32) ,adj_csr.indptr.astype(np.int32) )
   model = model2.TwoLayerGCN(in_feats=g.ndata['feat'].shape[1],hidden_feats=32, out_feats=1 , graph=gra, device='cuda')
   model.to('cuda')
-  optimizer = torch.optim.Adam((model.parameters()), lr=0.01, weight_decay=5e-4) 
-  scaler = GradScaler()
+  # print(model.parameters())
+  # for name, param in model.named_parameters():
+  #     print(f"参数名称: {name}")
+  #     print(f"参数值:\n{param}")
+  #     print(f"参数的形状: {param.shape}")
+  #     print()
 
+  optimizer = torch.optim.Adam((model.parameters()), lr=0.01) 
+  scaler = GradScaler()
+  
 
 
   # TRAIN
   # for epoch in tqdm(range(1000)):
-  for epoch in range(100):
+  for epoch in range(1000):
     out =  model(g.ndata['feat'].cuda())
     label = g.ndata['label'].cuda()
     out = torch.squeeze(out)
@@ -73,6 +80,7 @@ if __name__ == '__main__':
     
     optimizer.zero_grad()
     loss.backward()
+    optimizer.step()
     # scaler.scale(loss).backward()
     # scaler.step(optimizer)
     # scaler.update()
