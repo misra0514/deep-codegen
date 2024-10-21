@@ -60,7 +60,7 @@ if __name__ == '__main__':
   #     print(f"参数的形状: {param.shape}")
   #     print()
 
-  optimizer = torch.optim.Adam((model.parameters()), lr=0.01) 
+  optimizer = torch.optim.Adam((model.parameters()), lr=0.1) 
   scaler = GradScaler()
   
 
