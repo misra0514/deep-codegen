@@ -14,7 +14,7 @@ class GCNLayer(nn.Module):
         # self.weight = nn.Parameter(th.empty(in_feats, out_feats)).to(device)
         self.graph = graph
         self.device = device
-        self.linear = nn.Linear(in_feats,out_feats)
+        self.linear = nn.Linear(in_feats,out_feats,bias=True)
         # self.register_parameter('weight',None)
         # self.reset_parameters()
 

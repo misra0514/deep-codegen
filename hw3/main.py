@@ -4,6 +4,8 @@ import torch
 import scipy.sparse as sp
 from torch.cuda.amp import GradScaler, autocast
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
+
 
 import sys
 sys.path.append("/mnt/data/home/yguo/projects/sys4NN/deep-codegen")
@@ -45,7 +47,6 @@ if __name__ == '__main__':
   row_ptr=torch.from_numpy(adj_csr.indptr)
   col_ind=torch.from_numpy(adj_csr.indices)
   numlist = torch.arange(col.size(0), dtype=torch.int32)
-  # # TODO: col_ind 可能还有点问题，这个数组是ppt里的 DEST Vertex吗..?
 
   Vnum = row_ptr.size()[0]-1
   Enum = col_ind.size()[0]
@@ -60,28 +61,51 @@ if __name__ == '__main__':
   #     print(f"参数的形状: {param.shape}")
   #     print()
 
-  optimizer = torch.optim.Adam((model.parameters()), lr=0.01) 
-  scaler = GradScaler()
+  optimizer = torch.optim.Adam((model.parameters()), lr=0.1, weight_decay=1e-3) 
   
-
 
   # TRAIN
   # for epoch in tqdm(range(1000)):
-  for epoch in range(2000):
+  x = []
+  y1 = []
+  y2 = []
+  fig, ax1 = plt.subplots()
+  plt.xticks()
+  for epoch in range(1000):
     out =  model(g.ndata['feat'].cuda())
     label = g.ndata['label'].cuda()
     out = torch.squeeze(out)
 
-    # print(torch.squeeze(out).shape)
-    # print(label.shape)
-    # loss = F.cross_entropy(out, label)
     loss = (out-label).abs()
+
     loss = loss.sum()
+    acc = label.sum()
+    acc = loss.item()/ acc.item()
+    acc = 1-acc
     
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
-    # scaler.scale(loss).backward()
-    # scaler.step(optimizer)
-    # scaler.update()
-    print('epoch', epoch, 'loss', loss.item())
+    
+    print('Epoch', epoch, 'loss  ', loss.item(),'  Acc:', acc)
+    if(epoch % 50 ==0):
+      x.append(epoch)
+      y1.append(loss.item())
+      y2.append(acc)
+
+
+  ax1.set_xlabel('Epoch')
+  ax1.set_ylabel('Loss', color='tab:red')
+  ax1.plot(x, y1, color='tab:red', label='Loss')
+  ax1.tick_params(axis='y', labelcolor='tab:red')
+
+  ax2 = ax1.twinx()  
+  ax2.set_ylabel('Accuracy', color='tab:blue')
+  ax2.plot(x, y2, color='tab:blue', label='Accuracy')
+  ax2.tick_params(axis='y', labelcolor='tab:blue')
+
+  plt.title('Training Loss and Accuracy over ' + args.dataset)
+  fig.legend(loc='upper left')
+  fig.tight_layout()
+  plt.savefig('./result/'+args.dataset+'.png')
+
