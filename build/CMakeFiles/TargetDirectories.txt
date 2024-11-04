@@ -1,6 +1,6 @@
-/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/CMakeFiles/graphpy.dir
-/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/CMakeFiles/libgp.so.dir
-/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/CMakeFiles/edit_cache.dir
-/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/CMakeFiles/rebuild_cache.dir
-/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/pybind11/CMakeFiles/edit_cache.dir
-/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/pybind11/CMakeFiles/rebuild_cache.dir
+/scratch/yguo25/files/nnsys/deep-codegen/build/CMakeFiles/graphpy.dir
+/scratch/yguo25/files/nnsys/deep-codegen/build/CMakeFiles/libgp.so.dir
+/scratch/yguo25/files/nnsys/deep-codegen/build/CMakeFiles/edit_cache.dir
+/scratch/yguo25/files/nnsys/deep-codegen/build/CMakeFiles/rebuild_cache.dir
+/scratch/yguo25/files/nnsys/deep-codegen/build/pybind11/CMakeFiles/edit_cache.dir
+/scratch/yguo25/files/nnsys/deep-codegen/build/pybind11/CMakeFiles/rebuild_cache.dir

@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/data/home/yguo/projects/sys4NN/deep-codegen/pybind11
+# Install script for directory: /scratch/yguo25/files/nnsys/deep-codegen/pybind11
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

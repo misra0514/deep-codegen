@@ -1,12 +1,12 @@
 #include "kernel.h"
 #include "cuda_runtime.h"
-#include "unistd.h"
-#include "iostream"
+// #include "unistd.h"
+// #include "iostream"
 
-#define OFFSET(row, col, ld) ((row) * (ld) + (col))
-#define FLOAT4(pointer) (reinterpret_cast<float4*>(&(pointer))[0])
+// #define OFFSET(row, col, ld) ((row) * (ld) + (col))
+// #define FLOAT4(pointer) (reinterpret_cast<float4*>(&(pointer))[0])
 
-using std::cout;
+// using std::cout;
 
 template <size_t BLOCK_TILE_SIZE_X, size_t BLOCK_TILE_SIZE_Y,
           size_t BLOCK_TILE_SIZE_K, size_t NUM_THREADS,

@@ -5,15 +5,15 @@ class linear_impl(th.autograd.Function):
     @staticmethod
     def forward(ctx, X, W, dim1_0, dim1_1, device0):
         res = gp_apis.gp_linear(X, W, dim1_0, dim1_1, device0)
-        ctx.backward_cache = X,W,dim1_0, dim1_1 #must be implemented
+        ctx.backward_cache = X,W #must be implemented
         return res
 
     @staticmethod
     def backward(ctx, dZ):
-        X, W,dim1_0, dim1_1 = ctx.backward_cache
-        dydx = linear_impl.apply(dZ, W, dim1_0, dim1_1, 'cuda')
-        X = X.t().contiguous()
-        dydw = linear_impl.apply(X, dZ, dim1_0, dim1_1, 'cuda')
+        X, W= ctx.backward_cache
+        dydx = linear_impl.apply(dZ, W.t().contiguous(), X.shape[0], X.shape[1], 'cuda')
+        # X = X.t().contiguous()
+        dydw = linear_impl.apply(X.t().contiguous(), dZ, W.shape[0], W.shape[1], 'cuda')
         return dydx, dydw, None, None, None
 
 def linear(X, W, dim1_0, dim1_1, device0):

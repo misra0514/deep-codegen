@@ -8,11 +8,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/mnt/data/home/yguo/projects/sys4NN/deep-codegen/kernel_pybind.cpp" "CMakeFiles/graphpy.dir/kernel_pybind.cpp.o" "gcc" "CMakeFiles/graphpy.dir/kernel_pybind.cpp.o.d"
+  "/scratch/yguo25/files/nnsys/deep-codegen/kernel_pybind.cpp" "CMakeFiles/graphpy.dir/kernel_pybind.cpp.o" "gcc" "CMakeFiles/graphpy.dir/kernel_pybind.cpp.o.d"
   )
 
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

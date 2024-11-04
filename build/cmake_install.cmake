@@ -1,4 +1,4 @@
-# Install script for directory: /mnt/data/home/yguo/projects/sys4NN/deep-codegen
+# Install script for directory: /scratch/yguo25/files/nnsys/deep-codegen
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/pybind11/cmake_install.cmake")
+  include("/scratch/yguo25/files/nnsys/deep-codegen/build/pybind11/cmake_install.cmake")
 
 endif()
 
@@ -56,5 +56,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/scratch/yguo25/files/nnsys/deep-codegen/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
