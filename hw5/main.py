@@ -2,9 +2,11 @@ import dgl
 import argparse
 import torch
 import scipy.sparse as sp
+import torch.cuda
 from torch.cuda.amp import GradScaler, autocast
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
+from tqdm import *
 
 
 import sys
@@ -61,8 +63,9 @@ if __name__ == '__main__':
   #     print(f"参数的形状: {param.shape}")
   #     print()
 
-  optimizer = torch.optim.Adam((model.parameters()), lr=0.1, weight_decay=1e-3) 
-  
+  # optimizer = torch.optim.Adam((model.parameters()), lr=0.1, weight_decay=1e-3) 
+  optimizer =  torch.optim.Adam(itertools.chain(model.parameters()), lr=0.1, weight_decay=1e-3, capturable=True) 
+
 
   # TRAIN
   # for epoch in tqdm(range(1000)):
@@ -71,41 +74,62 @@ if __name__ == '__main__':
   y2 = []
   fig, ax1 = plt.subplots()
   plt.xticks()
-  for epoch in range(1000):
-    out =  model(g.ndata['feat'].cuda())
-    label = g.ndata['label'].cuda()
-    out = torch.squeeze(out)
-
-    loss = (out-label).abs()
-
-    loss = loss.sum()
-    acc = label.sum()
-    acc = loss.item()/ acc.item()
-    acc = 1-acc
-    
-    optimizer.zero_grad()
-    loss.backward()
-    optimizer.step()
-    
-    print('Epoch', epoch, 'loss  ', loss.item(),'  Acc:', acc)
-    if(epoch % 50 ==0):
-      x.append(epoch)
-      y1.append(loss.item())
-      y2.append(acc)
 
 
-  ax1.set_xlabel('Epoch')
-  ax1.set_ylabel('Loss', color='tab:red')
-  ax1.plot(x, y1, color='tab:red', label='Loss')
-  ax1.tick_params(axis='y', labelcolor='tab:red')
+  # Capture using stream a
+  CUgraph = torch.cuda.CUDAGraph()
+  # warmup
+  a = torch.cuda.Stream()
+  a.wait_stream(torch.cuda.current_stream())
+  input = g.ndata['feat'].cuda()
+  label = g.ndata['label'].cuda()
 
-  ax2 = ax1.twinx()  
-  ax2.set_ylabel('Accuracy', color='tab:blue')
-  ax2.plot(x, y2, color='tab:blue', label='Accuracy')
-  ax2.tick_params(axis='y', labelcolor='tab:blue')
+  # sum = []
+  with torch.cuda.stream(a):
+    for i in range(3):
+      out =  model(input)
+      out = torch.squeeze(out)
+      loss = (out-label).abs().sum()
+      optimizer.zero_grad()
+      loss.backward()
+      optimizer.step()
+      # sum.append(loss.item())
 
-  plt.title('Training Loss and Accuracy over ' + args.dataset)
-  fig.legend(loc='upper left')
-  fig.tight_layout()
-  plt.savefig('./result/'+args.dataset+'.png')
+      # print('Epoch', i, 'loss  ', loss.item())
+
+  torch.cuda.current_stream().wait_stream(a)
+
+  optimizer.zero_grad(set_to_none=True)
+  with torch.cuda.graph(CUgraph):
+    for epoch in tqdm(range(3000)):
+      out =  model(input)
+      out = torch.squeeze(out)
+      loss = (out-label).abs().sum()
+      optimizer.zero_grad()
+      loss.backward()
+      optimizer.step()
+      # sum.append(loss.item())
+      
+      # print('Epoch', epoch, 'loss  ', loss.item())
+      # if(epoch % 50 ==0):
+      #   x.append(epoch)
+      #   y1.append(loss.item())
+      #   y2.append(acc)
+  # for i in range(3000):
+  #   print(sum[i])
+
+  # ax1.set_xlabel('Epoch')
+  # ax1.set_ylabel('Loss', color='tab:red')
+  # ax1.plot(x, y1, color='tab:red', label='Loss')
+  # ax1.tick_params(axis='y', labelcolor='tab:red')
+
+  # ax2 = ax1.twinx()  
+  # ax2.set_ylabel('Accuracy', color='tab:blue')
+  # ax2.plot(x, y2, color='tab:blue', label='Accuracy')
+  # ax2.tick_params(axis='y', labelcolor='tab:blue')
+
+  # plt.title('Training Loss and Accuracy over ' + args.dataset)
+  # fig.legend(loc='upper left')
+  # fig.tight_layout()
+  # plt.savefig('./result/'+args.dataset+'.png')
 

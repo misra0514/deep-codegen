@@ -302,10 +302,10 @@ PYBIND11_SIMPLE_GIL_MANAGEMENT:BOOL=OFF
 PYBIND11_TEST:BOOL=OFF
 
 //Path to a program.
-PYTHON_EXECUTABLE:FILEPATH=/mnt/data/home/yguo/anaconda3/envs/dgl2/bin/python
+PYTHON_EXECUTABLE:FILEPATH=/mnt/data/home/yguo/anaconda3/envs/dgl_t2/bin/python
 
 //Path to a library.
-PYTHON_LIBRARY:FILEPATH=/mnt/data/home/yguo/anaconda3/envs/dgl2/lib/libpython3.7m.so
+PYTHON_LIBRARY:FILEPATH=/mnt/data/home/yguo/anaconda3/envs/dgl_t2/lib/libpython3.9.so
 
 //Value Computed by CMake
 graphpy_BINARY_DIR:STATIC=/mnt/data/home/yguo/projects/sys4NN/deep-codegen/build
@@ -508,24 +508,24 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 //ADVANCED property for variable: CMAKE_VERBOSE_MAKEFILE
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PYTHON
-FIND_PACKAGE_MESSAGE_DETAILS_PYTHON:INTERNAL=/mnt/data/home/yguo/anaconda3/envs/dgl2/bin/python3.7.16
+FIND_PACKAGE_MESSAGE_DETAILS_PYTHON:INTERNAL=/mnt/data/home/yguo/anaconda3/envs/dgl_t2/bin/python3.9.20
 //Details about finding PythonInterp
-FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/mnt/data/home/yguo/anaconda3/envs/dgl2/bin/python][v3.7.16(3.6)]
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/mnt/data/home/yguo/anaconda3/envs/dgl_t2/bin/python][v3.9.20(3.6)]
 //Test HAS_FLTO
 HAS_FLTO:INTERNAL=1
 PYBIND11_INCLUDE_DIR:INTERNAL=/mnt/data/home/yguo/projects/sys4NN/deep-codegen/pybind11/include
 //ADVANCED property for variable: PYTHON_EXECUTABLE
 PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
-PYTHON_INCLUDE_DIRS:INTERNAL=/mnt/data/home/yguo/anaconda3/envs/dgl2/include/python3.7m
+PYTHON_INCLUDE_DIRS:INTERNAL=/mnt/data/home/yguo/anaconda3/envs/dgl_t2/include/python3.9
 PYTHON_IS_DEBUG:INTERNAL=0
-PYTHON_LIBRARIES:INTERNAL=/mnt/data/home/yguo/anaconda3/envs/dgl2/lib/libpython3.7m.so
+PYTHON_LIBRARIES:INTERNAL=/mnt/data/home/yguo/anaconda3/envs/dgl_t2/lib/libpython3.9.so
 //ADVANCED property for variable: PYTHON_LIBRARY
 PYTHON_LIBRARY-ADVANCED:INTERNAL=1
-PYTHON_MODULE_EXTENSION:INTERNAL=.cpython-37m-x86_64-linux-gnu.so
+PYTHON_MODULE_EXTENSION:INTERNAL=.cpython-39-x86_64-linux-gnu.so
 PYTHON_MODULE_PREFIX:INTERNAL=
-PYTHON_VERSION:INTERNAL=3.7.16
+PYTHON_VERSION:INTERNAL=3.9.20
 PYTHON_VERSION_MAJOR:INTERNAL=3
-PYTHON_VERSION_MINOR:INTERNAL=7
+PYTHON_VERSION_MINOR:INTERNAL=9
 Python_ADDITIONAL_VERSIONS:INTERNAL=3.11;3.10;3.9;3.8;3.7;3.6
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
@@ -537,5 +537,5 @@ pybind11_FOUND:INTERNAL=TRUE
 //Directory where pybind11 headers are located
 pybind11_INCLUDE_DIR:INTERNAL=/mnt/data/home/yguo/projects/sys4NN/deep-codegen/pybind11/include
 //Directories where pybind11 and possibly Python headers are located
-pybind11_INCLUDE_DIRS:INTERNAL=/mnt/data/home/yguo/projects/sys4NN/deep-codegen/pybind11/include;/mnt/data/home/yguo/anaconda3/envs/dgl2/include/python3.7m
+pybind11_INCLUDE_DIRS:INTERNAL=/mnt/data/home/yguo/projects/sys4NN/deep-codegen/pybind11/include;/mnt/data/home/yguo/anaconda3/envs/dgl_t2/include/python3.9
 

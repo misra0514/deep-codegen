@@ -182,12 +182,13 @@ __global__ void spmmv_kernel_csr
     return;
 }
 
-void gspmmv(graph_t& graph, array2d_t<float>& input1, array2d_t<float>& output, bool reverse, bool norm){
+void gspmmv(graph_t& graph, array2d_t<float>& input1, array2d_t<float>& output, bool reverse, bool norm,  uintptr_t stream_handle){
     int feat_len = input1.col_count;
+    cudaStream_t cuda_stream = reinterpret_cast<cudaStream_t>(stream_handle);
+    // cout<<cuda_stream <<std::endl;
 
-    spmmv_kernel_csr<<<graph.get_vcount() ,  feat_len,feat_len*sizeof(float), 0 >>>
+    spmmv_kernel_csr<<<graph.get_vcount() ,  feat_len,feat_len*sizeof(float), cuda_stream >>>
     (graph.offset, graph.DestVertex, input1.data_ptr, output.data_ptr, graph.get_vcount(),graph.get_ecount(), feat_len);
     // cout<<cudaGetErrorName(cudaGetLastError());
     // cudaDeviceSynchronize();
 }
-
