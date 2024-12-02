@@ -59,5 +59,27 @@ code download :
 git clone -b hw4_ddp https://github.com/misra0514/deep-codegen.git 
 ```
 
-## Result && diagrams:
+## Result:
 
+
+# HW5:
+
+Torch 2.0 is required for graph operations
+
+#### approach:
+- add change the old interface gspmmv into ```void gspmmv(graph_t& graph, array2d_t<float>& input1, array2d_t<float>& output, bool reverse, bool norm, uintptr_t stream_handle);```, where ```stream_handle``` is the parameter for streaming function. 
+
+- get stream number in ```gp_apis.py```, through ```th.cuda.current_stream().cuda_stream```. 
+
+- change data type from ```uintptr_t``` into ```cudaStream_t``` in ```kernel.cu```. 
+
+- add cuda graph in ```main.py```
+
+#### result:
+
+The following data was collected with 2000 epoches, cora datase: 
+
+| Usage | Time(s) |
+| -------- | -------- |
+| CudaGraph | 4.32 |
+| Normal | 5.67 |

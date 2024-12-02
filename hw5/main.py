@@ -8,6 +8,8 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 from tqdm import *
 
+import time
+
 
 import sys
 sys.path.append("/mnt/data/home/yguo/projects/sys4NN/deep-codegen")
@@ -100,14 +102,20 @@ if __name__ == '__main__':
   torch.cuda.current_stream().wait_stream(a)
 
   optimizer.zero_grad(set_to_none=True)
+
+  start = time.time()
+
   with torch.cuda.graph(CUgraph):
-    for epoch in tqdm(range(3000)):
+    for epoch in range(3000):
       out =  model(input)
       out = torch.squeeze(out)
       loss = (out-label).abs().sum()
       optimizer.zero_grad()
       loss.backward()
       optimizer.step()
+
+  end = time.time()
+  print(end - start)
       # sum.append(loss.item())
       
       # print('Epoch', epoch, 'loss  ', loss.item())
